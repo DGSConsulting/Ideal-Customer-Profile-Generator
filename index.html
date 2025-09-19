@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DGS Consulting Solutions - Ideal Customer Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #fafafa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .header .brand-highlight {
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+
+        .header .tagline {
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            color: #95a5a6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            border: 1px solid #ecf0f1;
+        }
+
+        .form-section h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .form-section h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6B8E5A;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(107, 142, 90, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #f8f9fa;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #6B8E5A;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            font-family: inherit;
+        }
+
+        .generate-btn:hover {
+            background: linear-gradient(90deg, #8A9F78 0%, #5A7E4A 50%, #3A4D13 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 142, 90, 0.3);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            border: 1px solid #ecf0f1;
+            margin-top: 20px;
+        }
+
+        .customer-profile {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .customer-profile.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border-left: 5px solid #6B8E5A;
+        }
+
+        .profile-header h3 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .profile-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .detail-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .detail-card h4 {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-card h4:before {
+            content: "▶";
+            color: #6B8E5A;
+            font-size: 0.9rem;
+        }
+
+        .detail-card ul {
+            list-style: none;
+        }
+
+        .detail-card li {
+            margin-bottom: 10px;
+            padding-left: 0;
+            color: #34495e;
+            font-size: 0.95rem;
+        }
+
+        .detail-card li strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .export-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .export-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .analyze-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .analyze-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .growth-highlight {
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .growth-highlight h4 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .metric-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-section {
+                padding: 25px;
+            }
+
+            .profile-details {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-buttons button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        .assessment-cta {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .assessment-cta h4 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .assessment-cta p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .cta-btn {
+            background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: linear-gradient(90deg, #8A9F78 0%, #5A7E4A 50%, #3A4D13 100%);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="brand-highlight">DGS</span> Consulting Solutions</h1>
+            <p class="tagline">Ideal Customer Profile Generator</p>
+            <p class="subtitle">Identify your biggest growth opportunities by defining your perfect customer profile</p>
+        </div>
+
+        <div class="assessment-cta">
+            <h4>🎯 Strategic Customer Identification</h4>
+            <p>Use the same frameworks I use with $1M+ businesses to identify your ideal customer profile and growth opportunities</p>
+            <button class="cta-btn" onclick="document.querySelector('.form-section').scrollIntoView({behavior: 'smooth'})">Start Analysis</button>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>Business Overview</h2>
+                <div class="form-group">
+                    <label for="industry">Industry/Sector</label>
+                    <select id="industry">
+                        <option value="">Select Your Industry</option>
+                        <option value="technology">Technology & Software</option>
+                        <option value="healthcare">Healthcare & Medical</option>
+                        <option value="finance">Financial Services</option>
+                        <option value="retail">Retail & E-commerce</option>
+                        <option value="manufacturing">Manufacturing</option>
+                        <option value="education">Education & Training</option>
+                        <option value="real-estate">Real Estate</option>
+                        <option value="consulting">Professional Services</option>
+                        <option value="hospitality">Hospitality & Tourism</option>
+                        <option value="construction">Construction & Engineering</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="company-size">Current Business Size</label>
+                    <select id="company-size">
+                        <option value="">Select Business Size</option>
+                        <option value="startup">Startup (1-10 employees)</option>
+                        <option value="small">Small Business (11-50 employees)</option>
+                        <option value="medium">Growing Business (51-250 employees)</option>
+                        <option value="large">Large Enterprise (250+ employees)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="revenue-range">Annual Revenue Range</label>
+                    <select id="revenue-range">
+                        <option value="">Select Revenue Range</option>
+                        <option value="under-100k">Under $100,000</option>
+                        <option value="100k-500k">$100,000 - $500,000</option>
+                        <option value="500k-1m">$500,000 - $1,000,000</option>
+                        <option value="1m-5m">$1M - $5M</option>
+                        <option value="5m-10m">$5M - $10M</option>
+                        <option value="over-10m">Over $10M</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="services">Core Services/Products</label>
+                    <textarea id="services" placeholder="Describe your main offerings and how you help clients achieve results..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>Target Market Analysis</h2>
+                <div class="form-group">
+                    <label for="geography">Geographic Focus</label>
+                    <input type="text" id="geography" placeholder="e.g., North America, Local market, Global">
+                </div>
+
+                <div class="form-group">
+                    <label for="decision-maker">Primary Decision Maker</label>
+                    <select id="decision-maker">
+                        <option value="">Select Decision Maker Type</option>
+                        <option value="ceo">CEO/Founder</option>
+                        <option value="cto">CTO/Technical Director</option>
+                        <option value="cfo">CFO/Financial Director</option>
+                        <option value="cmo">CMO/Marketing Director</option>
+                        <option value="coo">COO/Operations Director</option>
+                        <option value="hr">HR Director</option>
+                        <option value="department">Department Manager</option>
+                        <option value="owner">Business Owner</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Key Growth Bottlenecks & Challenges</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="scaling" value="scaling">
+                            <label for="scaling">Scaling Operations</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="efficiency" value="efficiency">
+                            <label for="efficiency">Operational Efficiency</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="digital" value="digital">
+                            <label for="digital">Digital Transformation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="systems" value="systems">
+                            <label for="systems">Process Systematization</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="revenue" value="revenue">
+                            <label for="revenue">Revenue Growth</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="market" value="market">
+                            <label for="market">Market Position</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="goals">Growth Objectives</label>
+                    <textarea id="goals" placeholder="What are their primary business goals and success metrics?"></textarea>
+                </div>
+
+                <button class="generate-btn" onclick="generateCustomerProfile()">
+                    🔍 Generate Ideal Customer Profile
+                </button>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div id="customer-profile" class="customer-profile">
+                <!-- Profile content will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateCustomerProfile() {
+            // Get form values
+            const industry = document.getElementById('industry').value;
+            const companySize = document.getElementById('company-size').value;
+            const revenueRange = document.getElementById('revenue-range').value;
+            const services = document.getElementById('services').value;
+            const geography = document.getElementById('geography').value;
+            const decisionMaker = document.getElementById('decision-maker').value;
+            const goals = document.getElementById('goals').value;
+
+            // Get selected challenges
+            const challenges = [];
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            checkboxes.forEach(cb => challenges.push(cb.value));
+
+            // Validate required fields
+            if (!industry || !companySize || !revenueRange || !services) {
+                alert('Please complete all required fields in the Business Overview section.');
+                return;
+            }
+
+            // Generate profile
+            const profile = createCustomerProfile({
+                industry,
+                companySize,
+                revenueRange,
+                services,
+                geography,
+                decisionMaker,
+                goals,
+                challenges
+            });
+
+            // Display profile
+            const profileContainer = document.getElementById('customer-profile');
+            profileContainer.innerHTML = profile;
+            profileContainer.classList.add('active');
+
+            // Scroll to results
+            document.querySelector('.results-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        function createCustomerProfile(data) {
+            const industryLabels = {
+                'technology': 'Technology & Software',
+                'healthcare': 'Healthcare & Medical',
+                'finance': 'Financial Services',
+                'retail': 'Retail & E-commerce',
+                'manufacturing': 'Manufacturing',
+                'education': 'Education & Training',
+                'real-estate': 'Real Estate',
+                'consulting': 'Professional Services',
+                'hospitality': 'Hospitality & Tourism',
+                'construction': 'Construction & Engineering',
+                'other': 'Other Industry'
+            };
+
+            const sizeLabels = {
+                'startup': 'Startup (1-10 employees)',
+                'small': 'Small Business (11-50 employees)',
+                'medium': 'Growing Business (51-250 employees)',
+                'large': 'Large Enterprise (250+ employees)'
+            };
+
+            const revenueLabels = {
+                'under-100k': 'Under $100,000',
+                '100k-500k': '$100,000 - $500,000',
+                '500k-1m': '$500,000 - $1,000,000',
+                '1m-5m': '$1M - $5M',
+                '5m-10m': '$5M - $10M',
+                'over-10m': 'Over $10M'
+            };
+
+            const decisionMakerLabels = {
+                'ceo': 'CEO/Founder',
+                'cto': 'CTO/Technical Director',
+                'cfo': 'CFO/Financial Director',
+                'cmo': 'CMO/Marketing Director',
+                'coo': 'COO/Operations Director',
+                'hr': 'HR Director',
+                'department': 'Department Manager',
+                'owner': 'Business Owner'
+            };
+
+            const challengeLabels = {
+                'scaling': 'Scaling Operations Effectively',
+                'efficiency': 'Improving Operational Efficiency',
+                'digital': 'Digital Transformation Initiatives',
+                'systems': 'Process Systematization',
+                'revenue': 'Accelerating Revenue Growth',
+                'market': 'Strengthening Market Position'
+            };
+
+            // Generate company persona
+            const persona = generateBusinessPersona(data.industry, data.companySize, data.revenueRange);
+
+            return `
+                <div class="profile-header">
+                    <h3>🎯 ${persona.name}</h3>
+                    <p>Your Ideal Customer Profile Analysis</p>
+                </div>
+
+                <div class="growth-highlight">
+                    <h4>Growth Opportunity Assessment</h4>
+                    <p>This profile represents your highest-value prospects with the greatest potential for measurable results</p>
+                </div>
+
+                <div class="profile-details">
+                    <div class="detail-card">
+                        <h4>Company Demographics</h4>
+                        <ul>
+                            <li><strong>Industry:</strong> ${industryLabels[data.industry]} <span class="metric-badge">Target</span></li>
+                            <li><strong>Business Size:</strong> ${sizeLabels[data.companySize]}</li>
+                            <li><strong>Revenue Range:</strong> ${revenueLabels[data.revenueRange]}</li>
+                            <li><strong>Geographic Focus:</strong> ${data.geography || 'Not specified'}</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Decision Maker Profile</h4>
+                        <ul>
+                            <li><strong>Primary Contact:</strong> ${data.decisionMaker ? decisionMakerLabels[data.decisionMaker] : 'Various Levels'}</li>
+                            <li><strong>Typical Experience:</strong> ${persona.experience}</li>
+                            <li><strong>Decision Timeline:</strong> ${persona.timeline}</li>
+                            <li><strong>Authority Level:</strong> ${persona.authority}</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Growth Bottlenecks</h4>
+                        <ul>
+                            ${data.challenges.length > 0 ? 
+                                data.challenges.map(challenge => `<li>${challengeLabels[challenge]} <span class="metric-badge">Priority</span></li>`).join('') :
+                                '<li>General business optimization needs</li>'
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Value Proposition Match</h4>
+                        <ul>
+                            <li><strong>Primary Need:</strong> ${persona.primaryNeed}</li>
+                            <li><strong>Expected ROI:</strong> ${persona.expectedROI}</li>
+                            <li><strong>Investment Range:</strong> ${persona.investmentRange}</li>
+                            <li><strong>Success Metrics:</strong> ${persona.successMetrics}</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Business Goals & Objectives</h4>
+                        <ul>
+                            <li><strong>Stated Goals:</strong> ${data.goals || 'Business optimization and growth'}</li>
+                            <li><strong>Growth Stage:</strong> ${persona.growthStage}</li>
+                            <li><strong>Key Priorities:</strong> ${persona.priorities}</li>
+                            <li><strong>Competitive Focus:</strong> ${persona.competitive}</li>
+                        </ul>
+                    </div>
+
+                    <div class="detail-card">
+                        <h4>Engagement Strategy</h4>
+                        <ul>
+                            <li><strong>Best Approach:</strong> ${persona.approach}</li>
+                            <li><strong>Communication Style:</strong> ${persona.communication}</li>
+                            <li><strong>Proposal Focus:</strong> ${persona.proposalFocus}</li>
+                            <li><strong>Follow-up Cadence:</strong> ${persona.followup}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="assessment-cta">
+                    <h4>📊 Next Step: Comprehensive Business Assessment</h4>
+                    <p>Take the same 10-minute assessment I use with growing businesses to identify your specific growth bottlenecks</p>
+                    <button class="cta-btn" onclick="window.open('http://dgsconsulting.solutions/', '_blank')">Take Assessment</button>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="export-btn" onclick="exportProfile()">📄 Export Profile</button>
+                    <button class="analyze-btn" onclick="analyzeProfile()">🔍 Deep Analysis</button>
+                </div>
+            `;
+        }
+
+        function generateBusinessPersona(industry, size, revenue) {
+            const basePersonas = {
+                'technology': {
+                    name: 'TechScale Innovator',
+                    experience: '5-15 years in tech leadership',
+                    timeline: '3-6 months evaluation cycle',
+                    authority: 'High - Technical and budget authority',
+                    primaryNeed: 'Scalable systems and process optimization',
+                    expectedROI: '300-500% within 12-18 months',
+                    investmentRange: '$50K-$250K annually',
+                    successMetrics: 'User growth, system uptime, development velocity',
+                    growthStage: 'Scaling phase with technical challenges',
+                    priorities: 'Innovation, scalability, competitive advantage',
+                    competitive: 'Staying ahead of technology trends',
+                    approach: 'Data-driven ROI analysis with technical depth',
+                    communication: 'Direct, technical, results-focused',
+                    proposalFocus: 'Technical implementation and measurable outcomes',
+                    followup: 'Bi-weekly progress reports and technical updates'
+                },
+                'healthcare': {
+                    name: 'HealthCare Growth Partner',
+                    experience: '10-20 years in healthcare operations',
+                    timeline: '6-12 months decision process',
+                    authority: 'Moderate - requires board/compliance approval',
+                    primaryNeed: 'Operational efficiency and regulatory compliance',
+                    expectedROI: '200-400% with risk mitigation focus',
+                    investmentRange: '$75K-$500K annually',
+                    successMetrics: 'Patient outcomes, cost per patient, compliance scores',
+                    growthStage: 'Mature operations seeking efficiency gains',
+                    priorities: 'Patient safety, compliance, operational excellence',
+                    competitive: 'Quality of care and operational efficiency',
+                    approach: 'Evidence-based proposals with compliance focus',
+                    communication: 'Professional, detailed, risk-aware',
+                    proposalFocus: 'Compliance assurance and measurable improvements',
+                    followup: 'Monthly reviews with compliance reporting'
+                }
+            };
+
+            const sizeModifiers = {
+                'startup': {
+                    timeline: '1-3 months quick decisions',
+                    investmentRange: '$10K-$50K annually',
+                    approach: 'Lean, agile solutions with quick wins'
+                },
+                'large': {
+                    timeline: '6-18 months enterprise cycle',
+                    investmentRange: '$100K-$1M+ annually',
+                    approach: 'Enterprise-grade solutions with comprehensive support'
+                }
+            };
+
+            const revenueModifiers = {
+                'under-100k': {
+                    expectedROI: '500%+ with immediate impact focus',
+                    investmentRange: '$5K-$25K annually'
+                },
+                'over-10m': {
+                    expectedROI: '200-300% with strategic focus',
+                    investmentRange: '$250K-$1M+ annually'
+                }
+            };
+
+            let persona = basePersonas[industry] || basePersonas['technology'];
+            
+            if (sizeModifiers[size]) {
+                persona = { ...persona, ...sizeModifiers[size] };
+            }
+            
+            if (revenueModifiers[revenue]) {
+                persona = { ...persona, ...revenueModifiers[revenue] };
+            }
+
+            return persona;
+        }
+
+        function exportProfile() {
+            const profileContent = document.getElementById('customer-profile').innerText;
+            const blob = new Blob([profileContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'ideal-customer-profile-dgs-consulting.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        function analyzeProfile() {
+            // Simulate deep analysis functionality
+            alert('Deep Analysis Feature:\n\nThis would provide:\n• Detailed market sizing\n• Competitive landscape analysis\n• Revenue potential calculation\n• Customer acquisition cost estimates\n• Growth timeline projections\n\nContact DGS Consulting for comprehensive analysis.');
+        }
+
+        // Add smooth scrolling and form validation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add form field change listeners for better UX
+            const formFields = document.querySelectorAll('input, select, textarea');
+            formFields.forEach(field => {
+                field.addEventListener('change', function() {
+                    if (this.value) {
+                        this.style.borderColor = '#6B8E5A';
+                    } else {
+                        this.style.borderColor = '#ecf0f1';
+                    }
+                });
+            });
+
+            // Add loading state to generate button
+            const generateBtn = document.querySelector('.generate-btn');
+            generateBtn.addEventListener('click', function() {
+                this.innerHTML = '🔍 Generating Profile...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = '🔍 Generate Ideal Customer Profile';
+                    this.disabled = false;
+                }, 1000);
+            });
+        });
+  <footer style="
+      background: linear-gradient(90deg, #9CAF88 0%, #6B8E5A 50%, #4A5D23 100%);
+      color:#fff;
+      text-align:center;
+      padding:20px;
+      margin-top:0;
+      font-size:14px;
+    ">
+      <p>© 2025 DGS Consulting — Streamline Today, Scale Tomorrow</p>
+      <p>
+        <a href="mailto:DGSConsult@consultant.com" style="color:#fff; text-decoration:none; margin:0 8px;">Contact</a> |
+        <a href="https://www.linkedin.com/company/dgs-consutling/" target="_blank" style="color:#fff; text-decoration:none; margin:0 8px;">LinkedIn</a> |
+        <a href="https://www.instagram.com/dgsconsult/" target="_blank" style="color:#fff; text-decoration:none; margin:0 8px;">Instagram</a>
+      </p>
+    </footer>
